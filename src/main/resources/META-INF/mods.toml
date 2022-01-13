@@ -1,0 +1,27 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+license="MIT"
+issueTrackerURL="https://github.com/Ketheroth/Slots/issues"
+[[mods]]
+modId="slots"
+version="1.16.5-1.0.0"
+displayName="Slots"
+updateJSONURL="https://ketheroth.com/mods/slots.json"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/slots"
+logoFile="logo.png"
+authors="Ketheroth"
+description='''
+Earn new inventory slots with experience levels.
+'''
+[[dependencies.slots]]
+	modId="forge"
+	mandatory=true
+	versionRange="[36,)"
+	ordering="NONE"
+	side="BOTH"
+[[dependencies.slots]]
+	modId="minecraft"
+	mandatory=true
+	versionRange="[1.16.5,1.17)"
+	ordering="NONE"
+	side="BOTH"
