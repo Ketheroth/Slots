@@ -13,6 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -31,14 +32,40 @@ public class SlotsEvents {
 		}
 		SlotsCapabilityProvider provider = new SlotsCapabilityProvider();
 		event.addCapability(new ResourceLocation(Slots.MODID, "slots"), provider);
-		event.addListener(provider::invalidate);
 	}
 
+	@SubscribeEvent
+	public static void onPlayerDeath(LivingDeathEvent event) {
+		if (event.getEntity() instanceof ServerPlayer serverPlayer) {
+			serverPlayer.getCapability(SlotsCapability.PLAYER_SLOT_CAPABILITY).ifPresent(stackHandler -> {
+				for (int i = 0; i < stackHandler.getSlots(); i++) {
+					ItemStack stack = stackHandler.extractItem(i, ItemStack.EMPTY.getMaxStackSize(), false);
+					if (!stack.isEmpty()) {
+						ItemEntity itementity = new ItemEntity(serverPlayer.level, serverPlayer.getX(), serverPlayer.getEyeY(), serverPlayer.getZ(), stack);
+						itementity.setPickUpDelay(40);
+						itementity.setThrower(serverPlayer.getUUID());
+						serverPlayer.level.addFreshEntity(itementity);
+					}
+				}
+			});
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerClone(PlayerEvent.Clone event) {
+		if (event.isWasDeath()) {
+			event.getOriginal().getCapability(SlotsCapability.PLAYER_SLOT_CAPABILITY).ifPresent(oldCap -> {
+				event.getPlayer().getCapability(SlotsCapability.PLAYER_SLOT_CAPABILITY).ifPresent(newCap -> {
+					newCap.deserializeNBT(oldCap.serializeNBT());
+				});
+			});
+		}
+	}
 
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
 		if (event.getPlayer() instanceof ServerPlayer serverPlayer) {
-			event.getPlayer().getCapability(SlotsCapability.PLAYER_SLOT_CAPABILITY).ifPresent(stackHandler -> {
+			serverPlayer.getCapability(SlotsCapability.PLAYER_SLOT_CAPABILITY).ifPresent(stackHandler -> {
 				List<ItemStack> remaining = SlotsCapabilityProvider.changeSize(stackHandler, serverPlayer.experienceLevel);
 				addOrDropItems(serverPlayer, remaining);
 				NetworkHandler.INSTANCE.sendTo(new MessageLevelChanged(serverPlayer.experienceLevel), serverPlayer.connection.getConnection(), NetworkDirection.PLAY_TO_CLIENT);

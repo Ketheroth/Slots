@@ -8,9 +8,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Queue;
@@ -20,13 +20,9 @@ public class SlotsCapabilityProvider implements ICapabilitySerializable<Compound
 	private final ItemStackHandler items = new ItemStackHandler(0);
 	private final LazyOptional<ItemStackHandler> optional = LazyOptional.of(() -> items);
 
-	public void invalidate() {
-		optional.invalidate();
-	}
-
-	@NotNull
+	@Nonnull
 	@Override
-	public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
 		if (cap == SlotsCapability.PLAYER_SLOT_CAPABILITY) {
 			return optional.cast();
 		}
