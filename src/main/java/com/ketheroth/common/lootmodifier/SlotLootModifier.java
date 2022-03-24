@@ -29,7 +29,6 @@ public class SlotLootModifier extends LootModifier {
 	@NotNull
 	@Override
 	protected List<ItemStack> doApply(List<ItemStack> generatedLoot, LootContext context) {
-		System.out.println("applying");
 		if (!Configuration.XP_ONLY.get() && validLootTables.contains(context.getQueriedLootTableId())) {
 			if (context.getRandom().nextInt(3) * (1+context.getLuck()) > 1) {
 				generatedLoot.add(new ItemStack(SlotsItems.SLOT_REWARD.get(), 1));

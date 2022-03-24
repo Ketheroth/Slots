@@ -9,7 +9,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class SlotsLootModifiers {
 
-	public static final DeferredRegister<GlobalLootModifierSerializer<?>> GLOBAL_LOOT_MODIFIER_SERIALIZER = DeferredRegister.create(ForgeRegistries.LOOT_MODIFIER_SERIALIZERS, Slots.MODID);
+	public static final DeferredRegister<GlobalLootModifierSerializer<?>> GLOBAL_LOOT_MODIFIER_SERIALIZER = DeferredRegister.create(ForgeRegistries.Keys.LOOT_MODIFIER_SERIALIZERS, Slots.MODID);
 
 	public static final RegistryObject<SlotLootModifier.Serializer> CHEST_LOOT = GLOBAL_LOOT_MODIFIER_SERIALIZER.register("chest_loot_modifier", SlotLootModifier.Serializer::new);
 }
