@@ -1,6 +1,6 @@
 package com.ketheroth.common.inventory.container;
 
-import com.ketheroth.common.capability.SlotsCapability;
+import com.ketheroth.core.registry.SlotsCapabilities;
 import com.ketheroth.core.registry.SlotsContainerType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -18,8 +18,8 @@ public class SlotsContainer extends AbstractContainerMenu {
 	public SlotsContainer(int containerId, Player player) {
 		super(SlotsContainerType.SLOTS_CONTAINER.get(), containerId);
 		this.playerInventory = new InvWrapper(player.getInventory());
-		player.getCapability(SlotsCapability.PLAYER_SLOT_CAPABILITY).ifPresent(itemStackHandler -> {
-			slotsInventory = itemStackHandler;
+		player.getCapability(SlotsCapabilities.PLAYER_SLOT_CAPABILITY).ifPresent(capability -> {
+			slotsInventory = capability.getStacks();
 			// layout slots inventory
 			int slot = 0;
 			int size = slotsInventory.getSlots();

@@ -1,11 +1,13 @@
 package com.ketheroth.core;
 
 import com.ketheroth.client.gui.screen.inventory.SlotsInventoryScreen;
-import com.ketheroth.common.capability.SlotsCapability;
+import com.ketheroth.core.registry.SlotsCapabilities;
 import com.ketheroth.common.config.Configuration;
 import com.ketheroth.common.network.NetworkHandler;
 import com.ketheroth.core.keymapping.SlotsKeyMapping;
 import com.ketheroth.core.registry.SlotsContainerType;
+import com.ketheroth.core.registry.SlotsItems;
+import com.ketheroth.core.registry.SlotsLootModifiers;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.common.MinecraftForge;
@@ -29,10 +31,12 @@ public class Slots {
 	public Slots() {
 		final IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(this::commonSetup);
-		modEventBus.addListener(SlotsCapability::register);
+		modEventBus.addListener(SlotsCapabilities::register);
 		modEventBus.addListener(this::clientSetup);
 
 		SlotsContainerType.CONTAINERS.register(modEventBus);
+		SlotsItems.ITEMS.register(modEventBus);
+		SlotsLootModifiers.GLOBAL_LOOT_MODIFIER_SERIALIZER.register(modEventBus);
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Configuration.CONFIG);
 

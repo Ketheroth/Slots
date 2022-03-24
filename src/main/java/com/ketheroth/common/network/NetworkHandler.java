@@ -1,7 +1,7 @@
 package com.ketheroth.common.network;
 
-import com.ketheroth.common.network.message.MessageLevelChanged;
 import com.ketheroth.common.network.message.MessageOpenSlots;
+import com.ketheroth.common.network.message.MessageSyncToClient;
 import com.ketheroth.core.Slots;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkRegistry;
@@ -19,7 +19,7 @@ public class NetworkHandler {
 
 	public static void init() {
 		INSTANCE.registerMessage(0, MessageOpenSlots.class, (msg, buf) -> {}, buf -> new MessageOpenSlots(), MessageOpenSlots::handle);
-		INSTANCE.registerMessage(1, MessageLevelChanged.class, (msg, buf) -> buf.writeInt(msg.getLevel()), buf -> new MessageLevelChanged(buf.readInt()), MessageLevelChanged::handle);
+		INSTANCE.registerMessage(1, MessageSyncToClient.class, (msg, buf) -> buf.writeNbt(msg.getCompound()), buf -> new MessageSyncToClient(buf.readNbt()), MessageSyncToClient::handle);
 	}
 
 }
