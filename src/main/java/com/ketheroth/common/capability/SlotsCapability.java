@@ -11,21 +11,21 @@ import javax.annotation.Nullable;
 
 public class SlotsCapability {
 
-	@CapabilityInject(ItemStackHandler.class)
-	public static Capability<ItemStackHandler> PLAYER_SLOT_CAPABILITY = null;
+	@CapabilityInject(PlayerSlots.class)
+	public static Capability<PlayerSlots> PLAYER_SLOT_CAPABILITY = null;
 
-	public static class Storage implements Capability.IStorage<ItemStackHandler> {
+	public static class Storage implements Capability.IStorage<PlayerSlots> {
 
 		@Nullable
 		@Override
-		public INBT writeNBT(Capability<ItemStackHandler> capability, ItemStackHandler instance, Direction side) {
+		public INBT writeNBT(Capability<PlayerSlots> capability, PlayerSlots instance, Direction side) {
 			CompoundNBT nbt = new CompoundNBT();
 			nbt.put("SlotsContent", instance.serializeNBT());
 			return nbt;
 		}
 
 		@Override
-		public void readNBT(Capability<ItemStackHandler> capability, ItemStackHandler instance, Direction side, INBT nbt) {
+		public void readNBT(Capability<PlayerSlots> capability, PlayerSlots instance, Direction side, INBT nbt) {
 			instance.deserializeNBT(((CompoundNBT) nbt).getCompound("SlotsContent"));
 		}
 

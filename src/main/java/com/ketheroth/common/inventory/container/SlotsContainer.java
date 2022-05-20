@@ -18,8 +18,8 @@ public class SlotsContainer extends Container {
 	public SlotsContainer(int containerId, PlayerEntity player) {
 		super(SlotsContainerType.SLOTS_CONTAINER.get(), containerId);
 		this.playerInventory = new InvWrapper(player.inventory);
-		player.getCapability(SlotsCapability.PLAYER_SLOT_CAPABILITY).ifPresent(itemStackHandler -> {
-			slotsInventory = itemStackHandler;
+		player.getCapability(SlotsCapability.PLAYER_SLOT_CAPABILITY).ifPresent(capability -> {
+			slotsInventory = capability.getStacks();
 			// layout slots inventory
 			int slot = 0;
 			int size = slotsInventory.getSlots();

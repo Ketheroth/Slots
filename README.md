@@ -8,4 +8,4 @@ This mod allows earning new inventory slots with experience levels.
 
 ---
 
-CurseForge : [Project Link](https://www.curseforge.com/minecraft/mc-mods/slots)
+[CurseForge Link](https://www.curseforge.com/minecraft/mc-mods/slots)
