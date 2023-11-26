@@ -63,7 +63,6 @@ processResources {
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	filesMatching("META-INF/mods.toml") {
 		expand "version": version,
-				"resourcefullib_version": resourcefullib_version,
 				"resourcefulconfig_version": resourcefulconfig_version
 	}
 }

@@ -28,12 +28,6 @@ Earn new inventory slots with experience levels.
 	ordering = "NONE"
 	side = "BOTH"
 [[dependencies.slots]]
-	modId = "resourcefullib"
-	mandatory = true
-	versionRange = "[${resourcefullib_version},)"
-	ordering = "NONE"
-	side = "BOTH"
-[[dependencies.slots]]
 	modId = "resourcefulconfig"
 	mandatory = true
 	versionRange = "[${resourcefulconfig_version},)"

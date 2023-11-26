@@ -55,7 +55,6 @@ processResources {
 	filesMatching("fabric.mod.json") {
 		expand "version": version,
 				"fabric_loader_version": fabric_loader_version,
-				"resourcefullib_version": resourcefullib_version,
 				"resourcefulconfig_version": resourcefulconfig_version
 	}
 }

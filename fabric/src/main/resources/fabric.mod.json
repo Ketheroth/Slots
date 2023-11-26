@@ -30,7 +30,6 @@
 	"depends": {
 		"fabric": "*",
 		"minecraft": ">=1.20",
-		"resourcefullib": ">=${resourcefullib_version}",
 		"resourcefulconfig": ">=${resourcefulconfig_version}"
 	}
 }

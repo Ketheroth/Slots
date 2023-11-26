@@ -20,6 +20,6 @@ dependencies {
 
 processResources {
 	inputs.property "version", version
-	inputs.property "resourcefullib_version", resourcefullib_version
+//	inputs.property "resourcefullib_version", resourcefullib_version
 	inputs.property "resourcefulconfig_version", resourcefulconfig_version
 }
