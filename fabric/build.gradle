@@ -1,0 +1,95 @@
+plugins {
+	id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+	platformSetupLoomIde()
+	fabric()
+}
+
+loom {
+//	accessWidenerPath = file("src/main/resources/slots-fabric.accesswidener")
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDirs += project(":forge").file("src/generated/resources").absolutePath
+			exclude '.cache'
+		}
+	}
+}
+
+configurations {
+	common
+	shadowCommon
+	compileClasspath.extendsFrom common
+	runtimeClasspath.extendsFrom common
+	developmentFabric.extendsFrom common
+}
+
+dependencies {
+	modImplementation "net.fabricmc:fabric-loader:$fabric_loader_version"
+	modApi "net.fabricmc.fabric-api:fabric-api:$fabric_api_version+$minecraft_version"
+
+	common(project(path: ":common", configuration: "namedElements")) { transitive false }
+	shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+
+	modApi "com.terraformersmc:modmenu:$modmenu_version"
+
+//	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:$rei_version"
+//	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:$rei_version"
+//	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:$rei_version"
+//	modCompileOnly "dev.emi:emi:$rootProject.emi_version+$rootProject.minecraft_version"
+	modCompileOnly "mezz.jei:jei-$minecraft_version-fabric-api:$jei_version"
+	modRuntimeOnly "mezz.jei:jei-$minecraft_version-fabric:$jei_version"
+
+	modRuntimeOnly "curse.maven:jade-324717:4681829"  // Jade-1.20-fabric-11.4.3
+	modCompileOnly "curse.maven:jade-324717:4681835"  // Jade-1.20-fabric-11.4.3-api
+
+}
+
+processResources {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	inputs.property "fabric_loader_version", fabric_loader_version
+	filesMatching("fabric.mod.json") {
+		expand "version": version,
+				"fabric_loader_version": fabric_loader_version,
+				"resourcefullib_version": resourcefullib_version,
+				"resourcefulconfig_version": resourcefulconfig_version
+	}
+}
+
+shadowJar {
+	configurations = [project.configurations.shadowCommon]
+	archiveClassifier.set "dev-shadow"
+}
+
+remapJar {
+	input.set shadowJar.archiveFile
+	dependsOn shadowJar
+	archiveClassifier.set null
+}
+
+jar {
+	archiveClassifier.set "dev"
+	archivesBaseName = "$mod_id-fabric-$minecraft_version"
+}
+
+sourcesJar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	def commonSources = project(":common").sourcesJar
+	dependsOn commonSources
+	from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+	withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+		skip()
+	}
+}
+
+repositories {
+	maven { url "https://maven.terraformersmc.com" }
+}
+

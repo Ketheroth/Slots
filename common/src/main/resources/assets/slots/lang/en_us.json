@@ -1,0 +1,10 @@
+{
+	"screen.slots.slots_inventory": "Slots Inventory",
+	"key.slots.inventory": "Open Slots Inventory",
+	"slots.key.category": "Slots",
+	"item.slots.slot_reward": "Slot Reward",
+	"slots.config.level_per_slot": "Level per slot",
+	"slots.config.generate_item_reward": "Generate item reward",
+	"slots.config.preserve_rewards_on_death": "Preserve rewards on death"
+
+}

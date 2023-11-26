@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "slots",
+	"version": "${version}",
+	"name": "Slots",
+	"description": "Earn new inventory slots with experience levels",
+	"authors": [ "Ketheroth" ],
+	"contact": {
+		"website": "https://www.curseforge.com/minecraft/mc-mods/slots",
+		"repo": "https://github.com/Ketheroth/Slots",
+		"issues": "https://github.com/Ketheroth/Slots/issues"
+	},
+	"license": "MIT",
+	"icon": "logo.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.ketheroth.slots.fabric.SlotsFabric"
+		],
+		"client": [
+			"com.ketheroth.slots.client.SlotsFabricClient"
+		],
+		"modmenu": [
+			"com.ketheroth.slots.common.config.fabric.FabricMenuConfig"
+		]
+	},
+	"mixins": [
+		"slots-fabric.mixins.json"
+	],
+	"depends": {
+		"fabric": "*",
+		"minecraft": ">=1.20",
+		"resourcefullib": ">=${resourcefullib_version}",
+		"resourcefulconfig": ">=${resourcefulconfig_version}"
+	}
+}

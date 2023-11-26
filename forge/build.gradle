@@ -1,0 +1,100 @@
+plugins {
+	id "com.github.johnrengelman.shadow" version "7.1.2"
+}
+
+architectury {
+	platformSetupLoomIde()
+	forge()
+}
+
+sourceSets {
+	main {
+		resources {
+			srcDirs += project(":forge").file("src/generated/resources").absolutePath
+			exclude '.cache'
+		}
+	}
+}
+
+loom {
+	accessWidenerPath = project(":common").loom.accessWidenerPath
+	forge {
+		convertAccessWideners = true
+		extraAccessWideners.add loom.accessWidenerPath.get().asFile.name
+//		mixinConfig "$project.mod_id-common.mixins.json"
+//		mixinConfig "${project.mod_id}.mixins.json"
+		dataGen {
+			mod project.mod_id
+		}
+	}
+	runs {
+		data {
+			programArgs "--existing", project(":common").file("src/main/resources").absolutePath
+		}
+	}
+}
+
+configurations {
+	common
+	shadowCommon
+	compileClasspath.extendsFrom common
+	runtimeClasspath.extendsFrom common
+	developmentForge.extendsFrom common
+}
+
+dependencies {
+	forge "net.minecraftforge:forge:$minecraft_version-$forge_version"
+
+	common(project(path: ":common", configuration: "namedElements")) { transitive false }
+	shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+	modCompileOnly "mezz.jei:jei-$minecraft_version-forge-api:$jei_version"
+	modLocalRuntime("mezz.jei:jei-$minecraft_version-forge:$jei_version") { transitive = false }
+
+//	modCompileOnly "curse.maven:jei-238222:4690097"  // JEI 15.2.0.25
+//	modLocalRuntime "curse.maven:jei-238222:4690097"  // JEI 15.2.0.25
+
+	modCompileOnly "curse.maven:jade-324717:4681836"  // Jade-1.20.1-forge-11.4.3-api
+	modLocalRuntime "curse.maven:jade-324717:4681833"  // Jade-1.20.1-forge-11.4.3
+
+}
+
+processResources {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	filesMatching("META-INF/mods.toml") {
+		expand "version": version,
+				"resourcefullib_version": resourcefullib_version,
+				"resourcefulconfig_version": resourcefulconfig_version
+	}
+}
+
+shadowJar {
+	exclude "fabric.mod.json"
+
+	configurations = [project.configurations.shadowCommon]
+	archiveClassifier.set "dev-shadow"
+}
+
+remapJar {
+	input.set shadowJar.archiveFile
+	dependsOn shadowJar
+	archiveClassifier.set null
+}
+
+jar {
+	archiveClassifier.set "dev"
+	archivesBaseName = "$mod_id-forge-$minecraft_version"
+}
+
+sourcesJar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	def commonSources = project(":common").sourcesJar
+	dependsOn commonSources
+	from commonSources.archiveFile.map { zipTree(it) }
+}
+
+components.java {
+	withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+		skip()
+	}
+}
